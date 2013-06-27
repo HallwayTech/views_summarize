@@ -6,6 +6,12 @@
  * @ingroup views_style_plugins
  */
 class views_summarize_plugin_style_tablesummarized extends views_plugin_style_table {  
+  function option_definition() {
+    $options = parent::option_definition();
+    $options['summary_only'] = array('default' => FALSE, 'bool' => TRUE);
+    return $options;
+  }
+
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
     $form['#theme'] = 'views_summarize_plugin_style_tablesummarized';
@@ -16,7 +22,7 @@ class views_summarize_plugin_style_tablesummarized extends views_plugin_style_ta
       $form['info'][$field]['summarize'] = array(
         '#type' => 'select',
         '#options' => views_summarize_get_handlers(),
-        '#default_value' => !empty($this->options['info'][$field]['summarize']) ? $this->options['info'][$field]['summarize'] : 'none',
+        '#default_value' => $this->options['summary_only'],
         '#process' => array('views_process_dependency'),
         '#dependency' => array($id => array($field)),
       );
