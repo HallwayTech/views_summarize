@@ -30,6 +30,9 @@ function views_summarize_theme() {
     'views_summarize_type_spread' => array(
       'arguments' => array('data' => array()),
     ),
+  	'views_summarize_type_spreadmulti' => array(
+      'arguments' => array('data' => array()),
+    ),      
     'views_summarize_type_total' => array(
       'arguments' => array('data' => array()),
     ),
@@ -51,6 +54,7 @@ function views_summarize_get_handlers() {
     'total'   => t('Total'),
     'average' => t('Average'),
     'spread'  => t('Spread'),
+    'spreadmulti'  => t('Spread Multi'),  
   );
 }
 
@@ -227,4 +231,29 @@ function theme_views_summarize_type_spread($data) {
 
   return '<div class="label">' . t('Spread:') . '</div>' .
     theme('table', array(), $rows);
+}
+
+/**
+ * Theme: Spread table for multi values
+ */
+function theme_views_summarize_type_spreadmulti($data) {
+  $data_concat=implode('',$data);
+
+	$dom = new DOMDocument();
+  $dom->loadHTML($data_concat);
+	$divs = $dom->getElementsByTagName('div'); 
+	foreach ($divs as $div) {$datums[]= $div->nodeValue;}
+
+  foreach ($datums as $val) {
+    if (!isset($options[$val])) {
+      $options[$val] = 0;
+    }
+    $options[$val]++;
+  }
+  $rows = array();
+  foreach ($options as $value => $count) {
+    $rows[] = array($value, $count);
+  }
+
+  return '<div class="label">' . t('Spread (Multivalue):') . '</div>' .theme('table', array(), $rows);
 }
