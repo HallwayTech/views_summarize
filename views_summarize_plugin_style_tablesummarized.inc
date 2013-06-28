@@ -22,7 +22,7 @@ class views_summarize_plugin_style_tablesummarized extends views_plugin_style_ta
       $form['info'][$field]['summarize'] = array(
         '#type' => 'select',
         '#options' => views_summarize_get_handlers(),
-        '#default_value' => $this->options['summary_only'],
+        '#default_value' => !empty($this->options['info'][$field]['summarize']) ? $this->options['info'][$field]['summarize'] : 'none',
         '#process' => array('views_process_dependency'),
         '#dependency' => array($id => array($field)),
       );
@@ -31,7 +31,7 @@ class views_summarize_plugin_style_tablesummarized extends views_plugin_style_ta
       '#title' => t('Display the summary row only'),
       '#description' => t('If checked only the summary row will be displayed,'),
       '#type' => 'checkbox',
-      '#default_value' => !empty($this->options['summary_only']),
+      '#default_value' => $this->options['summary_only'],
     );
   }
 }
